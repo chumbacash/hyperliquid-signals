@@ -1,0 +1,7 @@
+hyperliquid-python-sdk
+pandas
+numpy
+TA-Lib
+fastapi
+uvicorn[standard]
+
