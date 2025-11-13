@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chumba Finance Signals Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
+</head>
+<body>
+    <header class="header">
+        <div class="branding">
+            <h1>Chumba Finance Signals</h1>
+            <p class="subtitle">Multi-timeframe Hyperliquid perp insights</p>
+        </div>
+        <div class="status" id="status-indicator">
+            Ready
+        </div>
+    </header>
+
+    <main class="layout">
+        <section class="controls">
+            <form id="query-form">
+                <div class="field">
+                    <label for="symbols">Symbols (comma separated)</label>
+                    <input
+                        type="text"
+                        id="symbols"
+                        name="symbols"
+                        placeholder="BTC,ETH"
+                        value="{{ default_symbols_input }}"
+                    />
+                </div>
+
+                <div class="field">
+                    <span class="label">Timeframes</span>
+                    <div class="timeframe-grid">
+                        {% for timeframe in default_timeframes %}
+                        <label class="checkbox">
+                            <input
+                                type="checkbox"
+                                name="timeframes"
+                                value="{{ timeframe }}"
+                                {% if loop.index0 < 3 %}checked{% endif %}
+                            />
+                            <span>{{ timeframe.upper() }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="api-url">Custom API URL (optional)</label>
+                    <input
+                        type="url"
+                        id="api-url"
+                        name="api-url"
+                        placeholder="https://api.hyperliquid.xyz"
+                    />
+                </div>
+
+                <div class="actions">
+                    <button type="submit">Fetch Signals</button>
+                    <button type="button" id="reset-button" class="secondary">Reset</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="results">
+            <div id="last-updated" class="last-updated">Awaiting data…</div>
+            <div id="results-container" class="cards-grid">
+                <!-- Populated via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <template id="card-template">
+        <article class="signal-card">
+            <header class="signal-header">
+                <h2 class="signal-title"></h2>
+                <span class="direction-badge"></span>
+            </header>
+            <div class="signal-body">
+                <pre class="formatted"></pre>
+                <details>
+                    <summary>Indicators</summary>
+                    <div class="indicators"></div>
+                </details>
+                <details>
+                    <summary>Price Action</summary>
+                    <div class="price-action"></div>
+                </details>
+            </div>
+        </article>
+    </template>
+
+    <script>
+        window.DEFAULT_SYMBOLS = {{ default_symbols_list | tojson }};
+        window.DEFAULT_TIMEFRAMES = {{ default_timeframes | tojson }};
+    </script>
+    <script type="module" src="{{ url_for('static', path='/app.js') }}"></script>
+</body>
+</html>
+

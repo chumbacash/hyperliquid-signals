@@ -4,4 +4,4 @@ numpy
 TA-Lib
 fastapi
 uvicorn[standard]
-
+Jinja2

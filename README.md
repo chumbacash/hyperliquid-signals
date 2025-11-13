@@ -20,13 +20,27 @@ Utilities for fetching Hyperliquid perpetual market data and generating multi-ti
    uvicorn main:app --reload
    ```
 
-3. Fetch signals from the API:
+3. Visit the dashboard in a browser:
+
+   ```
+   http://127.0.0.1:8000/
+   ```
+
+   Use the controls to select symbols and timeframes. The app consumes the `/signals` API under the hood.
+
+4. Fetch signals programmatically (optional):
 
    ```bash
    curl "http://127.0.0.1:8000/signals/BTC?timeframes=1d&timeframes=4h"
    ```
 
-   The response includes pre-formatted text suitable for broadcasting (`formatted` field), as well as structured indicator data.
+   Or request multiple symbols simultaneously:
+
+   ```bash
+   curl "http://127.0.0.1:8000/signals?symbols=BTC&symbols=ETH&timeframes=15m&timeframes=1h"
+   ```
+
+   Responses include pre-formatted text (`formatted`) and structured indicator/price-action data.
 
 ## How It Works
 
