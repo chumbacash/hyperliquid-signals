@@ -7,6 +7,12 @@ const cardTemplate = document.getElementById("card-template");
 
 const DEFAULT_TIMEFRAMES = window.DEFAULT_TIMEFRAMES ?? ["1d", "4h", "1h", "15m"];
 
+const HYPERLIQUID_COIN_IMAGE_BASE = "https://app.hyperliquid.xyz/coins";
+
+function getCoinImageUrl(symbol) {
+    return `${HYPERLIQUID_COIN_IMAGE_BASE}/${symbol.toUpperCase()}.svg`;
+}
+
 function setStatus(message, tone = "default") {
     statusIndicator.textContent = message;
     statusIndicator.dataset.tone = tone;
@@ -118,11 +124,18 @@ function renderResults(payload) {
         signals.forEach((signal) => {
             const node = cardTemplate.content.cloneNode(true);
             const card = node.querySelector(".signal-card");
+            const coinIcon = node.querySelector(".coin-icon");
             const title = node.querySelector(".signal-title");
             const badge = node.querySelector(".direction-badge");
             const formatted = node.querySelector(".formatted");
             const indicatorsContainer = node.querySelector(".indicators");
             const priceActionContainer = node.querySelector(".price-action");
+
+            coinIcon.src = getCoinImageUrl(symbol);
+            coinIcon.alt = `${symbol} icon`;
+            coinIcon.onerror = () => {
+                coinIcon.style.display = "none";
+            };
 
             title.textContent = `${symbol} · ${signal.timeframe.toUpperCase()}`;
             formatted.textContent = signal.formatted;

@@ -210,6 +210,20 @@ header.header {
     justify-content: space-between;
 }
 
+.signal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.coin-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .signal-title {
     margin: 0;
     font-size: 1.15rem;
