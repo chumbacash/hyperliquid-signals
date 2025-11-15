@@ -65,7 +65,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -87,23 +87,7 @@ body {
     min-width: 80px;
 }
 
-.ticker-change {
-    font-size: 0.85rem;
-    font-weight: 600;
-    min-width: 60px;
-}
-
-.ticker-change.positive {
-    color: hsl(145, 80%, 75%);
-}
-
-.ticker-change.negative {
-    color: hsl(5, 80%, 75%);
-}
-
-.ticker-change.neutral {
-    color: hsla(var(--hue), 20%, 80%, 0.7);
-}
+/* Price change removed for cleaner look */
 
 @keyframes scroll {
     0% {
@@ -139,12 +123,10 @@ header.header.scrolled {
 .twitter-button {
     padding: 0.5rem 1.25rem;
     border-radius: 8px;
-    background: linear-gradient(
-        135deg,
-        hsl(var(--hue), 25%, 25%),
-        hsl(var(--hue), 20%, 35%),
-        hsl(var(--hue), 15%, 45%)
-    );
+    background: linear-gradient(135deg,
+            hsl(var(--hue), 25%, 25%),
+            hsl(var(--hue), 20%, 35%),
+            hsl(var(--hue), 15%, 45%));
     background-size: 200% 200%;
     animation: gradientMove 5s ease infinite;
     color: var(--surface);
@@ -169,12 +151,10 @@ header.header.scrolled {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.01em;
-    background: linear-gradient(
-        135deg,
-        hsl(var(--hue), 25%, 20%),
-        hsl(var(--hue), 20%, 40%),
-        hsl(var(--hue), 15%, 60%)
-    );
+    background: linear-gradient(135deg,
+            hsl(var(--hue), 25%, 20%),
+            hsl(var(--hue), 20%, 40%),
+            hsl(var(--hue), 15%, 60%));
     background-size: 200% 200%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -183,9 +163,12 @@ header.header.scrolled {
 }
 
 @keyframes gradientMove {
-    0%, 100% {
+
+    0%,
+    100% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
@@ -197,10 +180,13 @@ header.header.scrolled {
 
 .layout {
     display: grid;
-    grid-template-columns: minmax(260px, 1fr) 3fr;
-    gap: 2rem;
-    padding: 2rem;
+    grid-template-columns: minmax(280px, 1fr) 3fr;
+    gap: 2.5rem;
+    padding: 2.5rem 3rem;
     flex: 1;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 @media (max-width: 900px) {
@@ -212,13 +198,13 @@ header.header.scrolled {
 
 .controls {
     background: var(--surface);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 16px;
+    padding: 2rem;
     border: 1px solid var(--border);
     position: sticky;
-    top: 1.5rem;
+    top: 6.5rem;
     height: fit-content;
-    box-shadow: 0 2px 8px hsla(var(--hue), 10%, 20%, 0.04);
+    box-shadow: 0 2px 12px hsla(var(--hue), 10%, 20%, 0.06);
 }
 
 .field {

@@ -4,23 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chumba Finance Signals Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
 </head>
 <body>
-    <div class="price-ticker">
-        <div class="ticker-content" id="ticker-content">
-            <span class="ticker-item">Loading prices...</span>
-        </div>
-    </div>
-
-    <header class="header">
-        <div class="branding">
-            <h1>Chumba Finance</h1>
-        </div>
-        <a href="https://x.com/Chumba_24" target="_blank" rel="noopener noreferrer" class="twitter-button">
-            Chumba_24
-        </a>
-    </header>
+    {% include 'components/header.html' %}
 
     <main class="layout">
         <section class="controls">
@@ -105,7 +92,7 @@
         window.DEFAULT_SYMBOLS = {{ default_symbols_list | tojson }};
         window.DEFAULT_TIMEFRAMES = {{ default_timeframes | tojson }};
     </script>
-    <script type="module" src="{{ url_for('static', path='/app.js') }}"></script>
+    <script type="module" src="{{ url_for('static', path='/js/app.js') }}"></script>
 </body>
 </html>
 
