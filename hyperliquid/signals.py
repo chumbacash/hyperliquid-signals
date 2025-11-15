@@ -31,7 +31,9 @@ class SignalPayload:
     stop_loss: float
     indicators: Dict[str, float]
     generated_at: datetime
+    confidence: float = 0.0
     price_action: Optional[Dict[str, Any]] = None
+    price_history: Optional[List[float]] = None
 
     def format(self) -> str:
         """Return a human-readable representation of the signal."""
@@ -91,7 +93,9 @@ class SignalPayload:
             "indicators": self.indicators,
             "generatedAt": self.generated_at.isoformat(),
             "formatted": self.format(),
+            "confidence": self.confidence,
             "priceAction": self.price_action,
+            "priceHistory": self.price_history,
         }
 
 
@@ -113,10 +117,12 @@ class SignalGenerator:
         candles = self._client.fetch_candles(request)
         indicators = compute_indicators(candles)
         direction = classify_direction(indicators)
+        confidence = calculate_confidence(indicators, direction)
         levels = build_trade_levels(candles, indicators, direction)
         generated_at = (as_of or datetime.now(tz=UTC)).replace(second=0, microsecond=0)
         higher_timeframe = _maybe_fetch_higher_timeframe(self._client, symbol, timeframe, as_of)
         price_action = analyze_price_action(candles, timeframe, higher_timeframe)
+        price_history = candles["close"].astype(float).tail(100).tolist()
         return SignalPayload(
             symbol=symbol,
             timeframe=timeframe,
@@ -126,7 +132,9 @@ class SignalGenerator:
             stop_loss=levels["stop_loss"],
             indicators=indicators,
             generated_at=generated_at,
+            confidence=confidence,
             price_action=price_action,
+            price_history=price_history,
         )
 
 
@@ -173,6 +181,76 @@ def classify_direction(indicators: Dict[str, float]) -> Direction:
         return "Short"
     # fallback to trend direction
     return "Long" if ema20 >= ema50 else "Short"
+
+
+def calculate_confidence(indicators: Dict[str, float], direction: Direction) -> float:
+    """Calculate signal confidence score (0-100) based on indicator alignment."""
+    score = 0.0
+    
+    ema20 = indicators["ema20"]
+    ema50 = indicators["ema50"]
+    adx = indicators["adx"]
+    plus_di = indicators["plus_di"]
+    minus_di = indicators["minus_di"]
+    macd_hist = indicators["macd_hist"]
+    rsi = indicators["rsi"]
+    close = indicators["close"]
+    
+    if direction == "Long":
+        # Trend alignment (30 points)
+        if ema20 > ema50:
+            score += 15
+            if close > ema20:
+                score += 15
+        
+        # Momentum (25 points)
+        if macd_hist > 0:
+            score += 15
+        if plus_di > minus_di:
+            score += 10
+        
+        # RSI (20 points)
+        if 45 <= rsi <= 70:
+            score += 20
+        elif 40 <= rsi < 45 or 70 < rsi <= 75:
+            score += 10
+        
+        # Trend strength (25 points)
+        if adx >= 25:
+            score += 25
+        elif adx >= 20:
+            score += 15
+        elif adx >= 15:
+            score += 10
+    
+    else:  # Short
+        # Trend alignment (30 points)
+        if ema20 < ema50:
+            score += 15
+            if close < ema20:
+                score += 15
+        
+        # Momentum (25 points)
+        if macd_hist < 0:
+            score += 15
+        if minus_di > plus_di:
+            score += 10
+        
+        # RSI (20 points)
+        if 30 <= rsi <= 55:
+            score += 20
+        elif 25 <= rsi < 30 or 55 < rsi <= 60:
+            score += 10
+        
+        # Trend strength (25 points)
+        if adx >= 25:
+            score += 25
+        elif adx >= 20:
+            score += 15
+        elif adx >= 15:
+            score += 10
+    
+    return min(100.0, max(0.0, score))
 
 
 def build_trade_levels(

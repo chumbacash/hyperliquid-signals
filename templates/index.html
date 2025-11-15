@@ -7,14 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
 </head>
 <body>
+    <div class="price-ticker">
+        <div class="ticker-content" id="ticker-content">
+            <span class="ticker-item">Loading prices...</span>
+        </div>
+    </div>
+
     <header class="header">
         <div class="branding">
-            <h1>Chumba Finance Signals</h1>
-            <p class="subtitle">Multi-timeframe Hyperliquid perp insights</p>
+            <h1>Chumba Finance</h1>
         </div>
-        <div class="status" id="status-indicator">
-            Ready
-        </div>
+        <a href="https://x.com/Chumba_24" target="_blank" rel="noopener noreferrer" class="twitter-button">
+            Chumba_24
+        </a>
     </header>
 
     <main class="layout">

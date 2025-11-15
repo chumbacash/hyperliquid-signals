@@ -3,70 +3,196 @@
 }
 
 :root {
-    color-scheme: dark;
-    --bg: #0f1117;
-    --surface: #161a23;
-    --surface-alt: #1f2532;
-    --text: #f5f7ff;
-    --muted: #9aa1b5;
-    --accent: #6c5ce7;
-    --accent-soft: rgba(108, 92, 231, 0.2);
-    --success: #2ecc71;
-    --danger: #e74c3c;
-    --border: rgba(255, 255, 255, 0.08);
+    /* Beige/Cream color scheme using HSL */
+    --hue: 40;
+
+    /* Backgrounds */
+    --bg: hsl(var(--hue), 15%, 95%);
+    --surface: hsl(var(--hue), 20%, 98%);
+    --surface-alt: hsl(var(--hue), 18%, 92%);
+
+    /* Text */
+    --text: hsl(var(--hue), 10%, 15%);
+    --text-muted: hsl(var(--hue), 8%, 45%);
+
+    /* Accent - darker beige/brown */
+    --accent: hsl(var(--hue), 25%, 30%);
+    --accent-hover: hsl(var(--hue), 25%, 25%);
+    --accent-soft: hsla(var(--hue), 25%, 30%, 0.1);
+
+    /* Status colors */
+    --success: hsl(145, 60%, 45%);
+    --success-soft: hsla(145, 60%, 45%, 0.1);
+    --danger: hsl(5, 70%, 55%);
+    --danger-soft: hsla(5, 70%, 55%, 0.1);
+    --warning: hsl(35, 85%, 55%);
+
+    /* Borders */
+    --border: hsl(var(--hue), 15%, 85%);
+    --border-light: hsl(var(--hue), 15%, 90%);
 }
 
 body {
     margin: 0;
-    font-family: "Inter", "Segoe UI", sans-serif;
-    background: radial-gradient(circle at top left, rgba(108, 92, 231, 0.15), transparent 45%), var(--bg);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+.price-ticker {
+    background: var(--accent);
+    color: var(--surface);
+    padding: 0.5rem 0;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--accent-hover);
+}
+
+.ticker-content {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+}
+
+.ticker-content.scrolling {
+    animation: scroll 40s linear infinite;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.ticker-logo {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.ticker-symbol {
+    font-weight: 600;
+    min-width: 50px;
+}
+
+.ticker-price {
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    min-width: 80px;
+}
+
+.ticker-change {
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 60px;
+}
+
+.ticker-change.positive {
+    color: hsl(145, 80%, 75%);
+}
+
+.ticker-change.negative {
+    color: hsl(5, 80%, 75%);
+}
+
+.ticker-change.neutral {
+    color: hsla(var(--hue), 20%, 80%, 0.7);
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 header.header {
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(8px);
-    background: rgba(15, 17, 23, 0.8);
+    border-bottom: 1px solid hsla(var(--hue), 15%, 85%, 0.6);
+    background: hsla(var(--hue), 20%, 98%, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px hsla(var(--hue), 10%, 20%, 0.05);
+    transition: all 0.3s ease;
+}
+
+header.header.scrolled {
+    background: hsla(var(--hue), 20%, 98%, 0.95);
+    box-shadow: 0 4px 12px hsla(var(--hue), 10%, 20%, 0.08);
+}
+
+.twitter-button {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    background: linear-gradient(
+        135deg,
+        hsl(var(--hue), 25%, 25%),
+        hsl(var(--hue), 20%, 35%),
+        hsl(var(--hue), 15%, 45%)
+    );
+    background-size: 200% 200%;
+    animation: gradientMove 5s ease infinite;
+    color: var(--surface);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.twitter-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px hsla(var(--hue), 25%, 30%, 0.3);
 }
 
 .branding h1 {
     margin: 0;
-    font-size: 1.75rem;
-    letter-spacing: 0.02em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    background: linear-gradient(
+        135deg,
+        hsl(var(--hue), 25%, 20%),
+        hsl(var(--hue), 20%, 40%),
+        hsl(var(--hue), 15%, 60%)
+    );
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 5s ease infinite;
+}
+
+@keyframes gradientMove {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 .branding .subtitle {
-    margin-top: 0.3rem;
-    color: var(--muted);
-    font-size: 0.95rem;
-}
-
-.status {
-    padding: 0.4rem 0.8rem;
-    border-radius: 999px;
-    background: var(--surface-alt);
-    font-size: 0.85rem;
-    color: var(--muted);
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.status[data-tone="loading"] {
-    color: #f8d57e;
-}
-
-.status[data-tone="success"] {
-    color: var(--success);
-}
-
-.status[data-tone="error"] {
-    color: var(--danger);
+    display: none;
 }
 
 .layout {
@@ -86,12 +212,13 @@ header.header {
 
 .controls {
     background: var(--surface);
-    border-radius: 1rem;
+    border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid var(--border);
     position: sticky;
     top: 1.5rem;
     height: fit-content;
+    box-shadow: 0 2px 8px hsla(var(--hue), 10%, 20%, 0.04);
 }
 
 .field {
@@ -110,16 +237,19 @@ header.header {
 .field input[type="text"],
 .field input[type="url"] {
     padding: 0.65rem 0.8rem;
-    border-radius: 0.75rem;
+    border-radius: 8px;
     border: 1px solid var(--border);
-    background: var(--surface-alt);
+    background: var(--bg);
     color: var(--text);
     font-size: 0.95rem;
+    transition: border-color 0.2s ease;
 }
 
 .field input[type="text"]:focus,
 .field input[type="url"]:focus {
-    outline: 2px solid var(--accent);
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .timeframe-grid {
@@ -299,4 +429,3 @@ details summary {
     color: var(--muted);
     border: 1px dashed var(--border);
 }
-
